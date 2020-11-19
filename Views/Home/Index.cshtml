@@ -1,0 +1,110 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="form-group">
+    <label asp-for="FullName" class="control-label"></label>
+    <input asp-for="FullName" class="form-control" />
+    <span asp-validation-for="FullName" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="Email" class="control-label"></label>
+    <input asp-for="Email" class="form-control" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="Position" class="control-label"></label>
+    <input asp-for="Position" class="form-control" />
+    <span asp-validation-for="Position" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="Address" class="control-label"></label>
+    <input asp-for="Address" class="form-control" />
+    <span asp-validation-for="Address" class="text-danger"></span>
+</div>
+
+
+<div class="form-group">
+    <select asp-items="@ViewBag.State" id="stateList">
+        <option>Select</option>
+     </select>
+</div>
+
+<div class="form-group">
+    <select id="citylist"></select>
+</div>
+
+<div class="form-row">
+   <div class="form-group col-md-6">
+      <input type="submit" value="Submit" class="btn btn-primary btn-block" />
+   </div>
+  <div  class="form-group col-md-6">
+    <a asp-action="GetAll"  class="btn btn-secondary btn-block"><i class="fa  fa-table"></i> Back to List</a>
+  </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+       
+        $(document).ready(function () {
+            var items = "<option value='0'>Select</option>";
+            $("#citylist").html(items);
+        });
+
+        
+        $("#stateList").change(function () {
+            var stateId = $("#stateList").val();
+            var url = "/Home/GetCityList";
+
+            $.getJSON(url, { StateId: stateId }, function (data) {  
+                var item = "";
+                $("#citylist").empty();
+                $.each(data, function (i, city) {
+                    item += '<option value="' + city.value + '">' + city.text + '</option>'
+                });
+                $("#citylist").html(item);
+            });
+        });
+
+       document.querySelector("#form").addEventListener('submit', async (e) => {
+            e.preventDefault();
+            var FullNameName = document.querySelector('#Name').value;
+            let Email = document.querySelector('#Email').value;
+            let Address = document.querySelector('#Address').value;
+            let Designation=document.querySelector('#Designation').value;
+            let CityName = document.querySelector('#citylist').value;
+            let StateName = document.querySelector('#stateList').value;   
+            
+            var obj = {
+                FullName,
+                Email,
+                Designation,
+                Address,
+                StateName,
+                CityName:
+            };
+            
+            const rawResponse = await fetch('https://localhost:44372/Home/Post', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj)
+            });
+            if (!rawResponse.ok) {
+                console.log('Error occured');
+                return;
+            }
+            window.location.replace('/GetAll');
+            
+        })
+
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
