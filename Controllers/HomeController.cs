@@ -18,7 +18,7 @@ namespace Dropdown.Controllers
             _context = context;
         }
 
-        public IActionResult Index(int StateId)
+        public IActionResult Index()
         {
             return View();
         }  
