@@ -49,19 +49,15 @@ namespace Dropdown.Controllers
 
        public Task<IActionResult> GetAll(){
 
-
-        return View(await ( from a in _context.Employee
-                            from b in _context.State
-                            from c in _context.City
-                            where a.Id==b.EmployeeId And a.Id==c.EmployeeId
+        return View(await ( from a in _context.Employee                            
                             select new EmpView
                               {
                                   Name = a.FullName,
                                   Address = a.Address,
                                   Designation = a.Position,
-                                  Email =A.Email,
-                                  CityName=c.CityName,
-                                  StateName=c.Name
+                                  Email =a.Email,
+                                  CityName=a.CityName,
+                                  StateName=a.StateName
                               }).ToListAsync()
                    );
                       

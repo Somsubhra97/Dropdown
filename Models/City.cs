@@ -5,9 +5,7 @@
         
         [ForeignKey("State")]
 		public int StateId{get;set;}
-
-		[ForeignKey("Employee")]
-		public int EmployeeId{get;set;}
+		
 
         public virtual State State { get; set; }
     }
