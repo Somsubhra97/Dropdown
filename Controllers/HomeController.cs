@@ -20,6 +20,7 @@ namespace Dropdown.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.State= new SelectList(_context.State.ToList() "Id", "Name");
             return View();
         }  
 
